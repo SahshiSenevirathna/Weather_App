@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>weather app</title>
+    <style>
+        body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('M-Maggs-pixabay.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      text-align: center;
+    }
+
+    .background-image {
+      position: fixed;
+      top: 0;
+      left:0;
+      width: 100%;
+      height: 100%;
+      background: url('M-Maggs-pixabay.jpg') ;
+      background-size: cover;
+      filter: blur(10px); 
+      z-index: -1;
+    }
+        .city-buttons button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .weather-display {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+
+
+        .city-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .city-buttons button {
+        background-color: #1e7bb6; /* Green background */
+        color: white; /* White text */
+        font-size: 16px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease; /* Smooth transition */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    }
+
+    .city-buttons button:hover {
+        background-color: #1c3762; /* Darker green on hover */
+        transform: translateY(-3px); /* Lift effect */
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Slightly deeper shadow */
+    }
+
+    .city-buttons button:active {
+        transform: translateY(1px); /* Slightly pressed effect */
+        box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2); /* Adjust shadow for pressed look */
+    }
+
+
+
+    <style>
+    /* Container for the weather display */
+    #weather-display {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    /* Card style */
+    #weather-display > div {
+        background-color: #f9f9f9; /* Light background */
+        border-radius: 10px; /* Rounded corners */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+        padding: 20px;
+        width: 300px;
+        text-align: center;
+        font-family: 'Arial', sans-serif; /* Clean font */
+        color: #333; /* Dark text */
+    }
+
+   /* Styling for h2 */
+   #weather-display h2 {
+        font-size: 24px;
+        margin-bottom: 15px;
+        color: #98e2ff; /* Green highlight */
+        font-weight: bold;
+    }
+
+    /* Styling for p tags */
+    #weather-display p {
+        font-size: 16px;
+        margin: 10px 0;
+        line-height: 2; /* Improve readability */
+    }
+
+    /* Highlighting temperature */
+    #weather-display p strong {
+        font-weight: bold;
+        color: #555; /* Muted strong text */
+    }
+
+    /* Specific styling for temperature */
+    #weather-display p:nth-of-type(1) {
+        font-size: 20px;
+        color: #ff5722; /* Orange for temperature */
+    }
+
+    /* Subtle italic for descriptions */
+    #weather-display p:nth-of-type(2) {
+        font-style: italic;
+        color: #777;
+    }
+</style>
+
+    
+
+</head>
+<body>
+    <h1>Current weather</h1>
+    <p>Click on a city to see the current weather:</p>
+    <div class="city-buttons">
+        <button onclick="getWeather('New York')">New York</button>
+        <button onclick="getWeather('London')">London</button>
+        <button onclick="getWeather('Tokyo')">Tokyo</button>
+        <button onclick="getWeather('Colombo')">Colombo</button>
+        <button onclick="getWeather('Dubai')">Dubai</button>
+    </div>
+    <div class="weather-display" id="weather-display">
+        <!-- Weather information will be displayed here -->
+    </div>
+
+    
+   
+    
+    <script>
+        const API_KEY = 'eaba52b24807158daafe310357f750d6'; // Replace with your OpenWeatherMap API key
+    
+        async function getWeather(city) {
+            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`;
+            const weatherDisplay = document.getElementById('weather-display');
+    
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error(`Error fetching weather for ${city}: ${response.status} ${response.statusText}`);
+                }
+    
+                const data = await response.json();
+                displayWeather(city, data);
+            } catch (error) {
+                console.error(error.message);
+                weatherDisplay.innerHTML = `
+                    <h2>Error</h2>
+                    <p>Unable to fetch weather data for ${city}. Please try again later.</p>
+                `;
+            }
+        }
+    
+        function displayWeather(city, data) {
+            const weatherDisplay = document.getElementById('weather-display');
+            const temperature = data.main.temp;
+            const description = data.weather[0].description;
+            const windSpeed = data.wind.speed;
+    
+            weatherDisplay.innerHTML = `
+                <h2>Weather in ${city}</h2>
+                <p><strong>Temperature:</strong> ${temperature}°C</p>
+                <p><strong>Description:</strong> ${description}</p>
+                <p><strong>Wind Speed:</strong> ${windSpeed} m/s</p>
+            `;
+        }
+    </script>
+    
+</body>
+</html>
